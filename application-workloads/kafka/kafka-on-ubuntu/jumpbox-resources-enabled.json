@@ -37,14 +37,14 @@
     },
     "imageOffer": {
       "type": "string",
-      "defaultValue": "0001-com-ubuntu-server-focal",
+      "defaultValue": "UbuntuServer",
       "metadata": {
         "Description": "Image Offer"
       }
     },
     "imageSKU": {
       "type": "string",
-      "defaultValue": "20_04-lts",
+      "defaultValue": "14.04.5-LTS",
       "metadata": {
         "Description": "Image SKU"
       }
@@ -57,7 +57,7 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_A1_v2",
+      "defaultValue": "Standard_A0",
       "metadata": {
         "description": "VM Size"
       }
@@ -67,6 +67,11 @@
       "metadata": {
         "description": "Location for all resources."
       }
+    },
+    "networkSecurityGroups_nicJumpbox_nsg_externalid": {
+
+      "defaultValue": "[resourceId('Microsoft.Network/networkSecurityGroups/', 'nicJumpbox-nsg')]",
+      "type": "String"
     }
   },
   "variables": {
@@ -80,6 +85,57 @@
       "location": "[parameters('location')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2024-01-01",
+      "name": "nicJumpbox_nsg",
+      "location": "westus",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AllowAnySSHInbound",
+            "id": "[resourceId('Microsoft.Network/networkSecurityGroups/securityRules', 'nicJumpbox_nsg', 'AllowAnySSHInbound')]",
+            "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+            "properties": {
+              "protocol": "TCP",
+              "sourcePortRange": "*",
+              "destinationPortRange": "22",
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 100,
+              "direction": "Inbound",
+              "sourcePortRanges": [],
+              "destinationPortRanges": [],
+              "sourceAddressPrefixes": [],
+              "destinationAddressPrefixes": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups/securityRules",
+      "apiVersion": "2024-01-01",
+      "name": "[concat('nicJumpbox_nsg', '/AllowAnySSHInbound')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', 'nicJumpbox_nsg')]"
+      ],
+      "properties": {
+        "protocol": "TCP",
+        "sourcePortRange": "*",
+        "destinationPortRange": "22",
+        "sourceAddressPrefix": "*",
+        "destinationAddressPrefix": "*",
+        "access": "Allow",
+        "priority": 100,
+        "direction": "Inbound",
+        "sourcePortRanges": [],
+        "destinationPortRanges": [],
+        "sourceAddressPrefixes": [],
+        "destinationAddressPrefixes": []
       }
     },
     {
@@ -104,7 +160,10 @@
               }
             }
           }
-        ]
+        ],
+        "networkSecurityGroup": {
+          "id": "[parameters('networkSecurityGroups_nicJumpbox_nsg_externalid')]"
+        }
       }
     },
     {
