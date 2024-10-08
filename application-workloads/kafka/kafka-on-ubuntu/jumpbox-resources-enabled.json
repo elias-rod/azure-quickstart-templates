@@ -37,14 +37,14 @@
     },
     "imageOffer": {
       "type": "string",
-      "defaultValue": "UbuntuServer",
+      "defaultValue": "0001-com-ubuntu-server-focal",
       "metadata": {
         "Description": "Image Offer"
       }
     },
     "imageSKU": {
       "type": "string",
-      "defaultValue": "14.04.5-LTS",
+      "defaultValue": "20_04-lts",
       "metadata": {
         "Description": "Image SKU"
       }
