@@ -139,7 +139,8 @@
       "name": "nicJumpbox",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses/', 'publicIP')]"
+        "[resourceId('Microsoft.Network/publicIPAddresses/', 'publicIP')]",
+        "[resourceId('Microsoft.Network/networkSecurityGroups/', 'nicJumpbox_nsg')]"
       ],
       "properties": {
         "ipConfigurations": [
