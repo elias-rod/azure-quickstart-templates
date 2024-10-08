@@ -154,7 +154,7 @@ expand_ip_range() {
 install_zookeeper()
 {
   apt-get update
-	apt-get -y install zookeeperd
+	apt-get -y install zookeeper
   mkdir /usr/local/zookeeper/data
   chmod -R 755 /usr/local/zookeeper/data
 
